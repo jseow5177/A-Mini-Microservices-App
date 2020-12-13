@@ -3,7 +3,7 @@ const eventControllers = require('./event.controller')
 
 const router = express.Router()
 
-router.route('/posts')
+router.route('/events')
   .post(eventControllers.postEvent)
 
 module.exports = router
