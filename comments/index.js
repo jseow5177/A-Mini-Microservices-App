@@ -10,13 +10,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cors())
 
-// In-memory storage for comments created
-const commentsByPostId = {}
-
 app.use('/', commentRoutes)
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)
 })
-
-module.exports = commentsByPostId
