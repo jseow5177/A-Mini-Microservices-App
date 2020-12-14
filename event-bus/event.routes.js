@@ -5,5 +5,6 @@ const router = express.Router()
 
 router.route('/events')
   .post(eventControllers.postEvent)
+  .get(eventControllers.retrieveEvents)
 
 module.exports = router
