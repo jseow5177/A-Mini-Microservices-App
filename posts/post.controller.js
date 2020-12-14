@@ -1,6 +1,19 @@
 const axios = require('axios')
 const { randomBytes } = require('crypto')
-const posts = require('./index')
+
+/**
+ * In memory storage to store posts with their comments
+  {
+    j123j42: {
+      id: 'j123j42',
+      title: 'post title',
+      comments: [
+        { id: 'klj3kl', content: 'comment!' }
+      ]
+    }
+  }
+ */
+const posts = {}
 
 const postControllers = {
 
@@ -28,8 +41,8 @@ const postControllers = {
     return res.status(200).send(posts)
   },
 
+  // Receive event emitted by event bus
   receiveEvent: function (req, res) {
-    console.log(req.body)
     return res.status(200).send({ status: 'OK' })
   }
 
