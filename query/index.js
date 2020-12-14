@@ -1,24 +1,13 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const axios = require('axios')
+
 const queryRoutes = require('./query.routes')
+const queryControllers = require('./query.controller')
 
 const PORT = 4002
 const app = express()
-
-/**
- * In memory storage to store posts with their comments
-  {
-    j123j42: {
-      id: 'j123j42',
-      title: 'post title',
-      comments: [
-        { id: 'klj3kl', content: 'comment!' }
-      ]
-    }
-  }
- */
-const posts = {}
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -26,8 +15,16 @@ app.use(cors())
 
 app.use('/', queryRoutes)
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Listening on ${PORT}`)
-})
 
-module.exports = posts
+  const res = await axios.get('http://localhost:4005/events')
+  const events = res.data
+
+  for (let event of events) {
+    console.log('Processing event: ', event.type)
+
+    queryControllers.handleEvent(event.type, event.data)
+  }
+  
+})
