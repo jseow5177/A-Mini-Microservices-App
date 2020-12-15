@@ -7,13 +7,10 @@ This is a minimalistic React, Node and Express application that demonstrates the
 A monolith contains routes, middlewares, business logic and database access to implement **all features** of an application.
 
 ![monolith](./assets/monolith.png)
-<br />
 
 On the other hand, a single microservice contains routes, middlewares, business logic and database access to implement **one feature** of an application.
 
 ![monolith](./assets/microservices.png)
-
-<br />
 
 ## Why Microservices?
 1. Increased resilience.
@@ -22,8 +19,6 @@ On the other hand, a single microservice contains routes, middlewares, business 
 2. Improved scalability.
     - Since each service is a separate component, you can easily scale up a single service without having to scale the entire application.
     - This saves costs and simplify scalability requirements.
-
-<br />
 
 ## Benefits of Database-Per-Service
 
@@ -34,13 +29,9 @@ In microservices design, each service gets its own database (if it needs one) an
     - At the same time, scaling the database will be a challenge as different services might have different requirements.
 2. Some services might function more efficiently with different types of DBs (SQL vs No-SQL).
 
-<br />
-
 ## Data Management in Microservices
 
 There are different communication strategies between services in a microservice architecture. They can be distinguished into **sync** and **async** communications.
-
-
 
 ### Sync Communication
 
@@ -55,8 +46,6 @@ In Sync Communication, services communicate with each other using **direct reque
 2. If any inter-service request fails, the overall request fails.
 3. The entire request is only as fast as the slowest request.
 4. Can easily introduce nested requests.
-
-<br />
 
 ### Async Communication with Events
 All services will communicate through an event bus by emitting and receiving events.
