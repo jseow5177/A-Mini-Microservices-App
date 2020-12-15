@@ -2,6 +2,8 @@
 
 This is a minimalistic React, Node and Express application that demonstrates the basic concepts of event-based microservices.
 
+## Content
+
 ## Monolithic Server vs Microservices
 
 A monolith contains routes, middlewares, business logic and database access to implement **all features** of an application.
@@ -87,3 +89,58 @@ However, how do we create such a database? Consider the following,
 #### Cons
 1. Data duplication. Extra DB and extra storage required.
 2. Much more complicated to understand and maintain.
+
+## App Overview
+In this mini microservices app, we will create 5 main functionalities:
+1. Create a Post
+2. List all Posts
+3. Create a Comment
+4. List all Comments
+5. Moderate Comments
+
+A Post can have zero or many Comments.
+
+### App Architecture
+
+![app_architecture](./assets/app_architecture.png)
+
+1. We have a React frontend that allows user to add / retrieve posts and comments. 
+2. All Services are simple Express applications.
+3. No databases will be used. All Posts and Comments will be stored in in-memory storages.
+4. An event bus service will be used to regulate the flow of events among other services.
+5. The event bus also stores past events that have occured.
+6. The Query Service is used as a **network requests minimization strategy**.
+    - Without Query Service, the React frontend will have to make separate network requests to the Posts and Comments Services to retrieve all Posts and Comments.
+    - The Query Service will combine and store all the Posts and Comments appropriately in an efficient data structure. The React frontend can then retrieve all the data required by making one request to the Query Service.
+7. The Moderation Service will be used to moderate the content of Comments and flag Comments with the restricted word "orange".
+
+### Event Bus Implementation
+1. There are many well-establish implementations of event bus such as RabbitMQ, Kafka, NATS, etc.
+2. In this simple application, it will just be an Express application that receives and publishes event.
+3. This is by no means a production-ready event bus.
+
+### Events
+
+### APIs
+
+#### Posts Service
+
+![posts_service](./assets/posts_service.png)
+
+#### Comments Service
+
+![comments_service](./assets/comments_service.png)
+
+#### Query Service
+
+![query_service](./assets/query_service.png)
+
+#### Moderation Service
+
+![moderation_service](./assets/moderation_service.png)
+
+#### Event Bus
+
+![event_bus](./assets/event_bus.png)
+
+### Event flow
