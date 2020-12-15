@@ -59,11 +59,11 @@ In Sync Communication, services communicate with each other using **direct reque
 <br />
 
 ### Async Communication with Events
-All services will communicate through an event bus. The services will communicate by emitting events.
+All services will communicate through an event bus by emitting and receiving events.
 
 ![async](./assets/async_1.png)
 
-For example, for Service D to function, it will need user information from Service A. First, it emits an event to event bus requesting for user information. The event can have a type and a payload.
+For example, for Service D to function, it will need user information from Service A. First, it emits an event to the event bus requesting for user information. The event can have a type and a payload.
 
 The event bus will know how to route and handle events accordingly. In this case, the event bus will pass the event of type UserQuery to Service A.
 
@@ -75,4 +75,26 @@ Once Service A processes the event, it will emit a new event with the data reque
 
 This process repeats for the rest of the information Service D requires from other services.
 
-The pros and cons of the async communication mentioned above is the same as sync communication!
+#### Pros
+1. Same as Sync communication.
+#### Cons
+1. Same as Sync communication.
+
+### Another variant of event-based communication
+What if we give Service D a database where it stores only the information it requires?
+
+However, how do we create such a database? Consider the following,
+
+![async](./assets/async_4.png)
+
+1. Whenever there is a request for product creation, Service B processes the request and saves the product into its own database.
+2. At the same time, Service B emits a ProductCreation event to the event bus. The event contains only the information required by Service D.
+3. The event bus routes the event to Service D, which then Service D saves the information into its own database,
+4. Now, whenever Service D requires product information, it doesn't need to make direct or event-based requests to Service B anymore. It can just extract the required information from its own database.
+
+#### Pros
+1. Service D has zero dependencies on other services.
+2. Service D will be extremely fast.
+#### Cons
+1. Data duplication. Extra DB and extra storage required.
+2. Much more complicated to understand and maintain.
