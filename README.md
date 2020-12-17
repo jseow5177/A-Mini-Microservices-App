@@ -3,6 +3,23 @@
 This is a minimalistic React, Node and Express application that demonstrates the basic concepts of event-based microservices.
 
 ## Content
+1. [Monolithic Server vs Microservices](#monolithic-server-vs-microservices)
+
+2. [Why Microservices?](#why-microservices-?)
+
+3. [Benefits of Database Per Service](#benefits-of-database-per-service)
+
+4. [Data Management in Microservices](#data-management-in-microservices)
+
+5. [App Overview](#app-overview)
+
+6. [Events](#events)
+
+7. [APIs](#apis)
+
+8. [Event Flow](#event-flow)
+
+9. [Basic Design Challenges and Solutions](#basic-design-challenges-and-solutions)
 
 ## Monolithic Server vs Microservices
 
@@ -145,7 +162,7 @@ A Post can have zero or many Comments.
 
 ![event_bus](./assets/event_bus.png)
 
-### Event flow
+### Event Flow
 
 ![event_bus](./assets/event_flow.png)
 
