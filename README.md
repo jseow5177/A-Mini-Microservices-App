@@ -100,19 +100,19 @@ In this mini microservices app, we will create 5 main functionalities:
 
 A Post can have zero or many Comments.
 
-### App Architecture
+### App Design
 
 ![app_architecture](./assets/app_architecture.png)
 
 1. We have a React frontend that allows user to add / retrieve posts and comments. 
 2. All Services are simple Express applications.
-3. No databases will be used. All Posts and Comments will be stored in in-memory storages.
-4. An event bus service will be used to regulate the flow of events among other services.
-5. The event bus also stores past events that have occured.
-6. The Query Service is used as a **network requests minimization strategy**.
-    - Without Query Service, the React frontend will have to make separate network requests to the Posts and Comments Services to retrieve all Posts and Comments.
-    - The Query Service will combine and store all the Posts and Comments appropriately in an efficient data structure. The React frontend can then retrieve all the data required by making one request to the Query Service.
-7. The Moderation Service will be used to moderate the content of Comments and flag Comments with the restricted word "orange".
+3. Posts Service handles Posts creation.
+4. Comments Service handles Comments creation.
+5. Moderation Service handles Comments moderation. It flags Comments with the restricted word "orange".
+6. Query Service handles the retrieval of all posts along with their comments.
+7. No databases will be used. All Posts and Comments will be stored in in-memory storages.
+8. Event bus handles the event-based communication between services.
+9. Event bus also stores past events that have occured.
 
 ### Event Bus Implementation
 1. There are many well-establish implementations of event bus such as RabbitMQ, Kafka, NATS, etc.
@@ -120,6 +120,8 @@ A Post can have zero or many Comments.
 3. This is by no means a production-ready event bus.
 
 ### Events
+
+![events](./assets/events.png)
 
 ### APIs
 
@@ -144,3 +146,24 @@ A Post can have zero or many Comments.
 ![event_bus](./assets/event_bus.png)
 
 ### Event flow
+
+![event_bus](./assets/event_flow.png)
+
+### Basic Design Challenges and Solutions
+1. Network requests minimization
+    - Without the Query Service, the frontend will have to retrieve all posts first via the Posts Service. Then, for each post, it will request for the comments from the Comments Service. 
+    - This will greatly increase the number of network requests required, which can be inefficient.
+    - The Query Service is created so that the React frontend can retrieve all posts along with their respective comments in one network request.
+    - Moreover, if the Posts and Comments Service go down, users can still retrieve old posts and comments via the Query Service.
+2. Event Sync - Dealing with Missing Events
+    - If Query Service goes down, any events that arrive at it will be ignored entirely. When it goes back up again, it will have no memory of the events that it has missed.
+
+    ![event_bus](./assets/sync_events.png)
+
+    - This causes data inconsistencies among services. The Query Service might be missing some old posts and comments.
+    - To tackle this issue, we will allocate some memory for the event bus to store past events that have occured. Whenever Query Service starts, it will call the event bus to retrieve the old events that have occured. This notifies the Query Service on everything that has happened (post creation, comment update, etc) while updating its posts and comments data as necessary.
+3. CommentUpdated vs CommentModerated
+    - Comment moderation is a business logic that belongs to the comments resource.
+    - Business logic of a resource should be handled and contained within its service, which is the Comments Service.
+    - The Query Service deals with only the presentation logic. It shouldn't be concerned with how and why a comment is updated. It should only be aware of **when** a comment is updated.
+    - This is the purpose of the CommentUpdated event received by the Query Service. It doesn't tell how a comment should be updated. That is handled by the CommentModerated event received by the Moderation Service.
