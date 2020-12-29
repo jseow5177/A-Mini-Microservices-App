@@ -1,0 +1,35 @@
+# The Deployment for Event Bus Service
+# It has only one pod with one container in it
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-bus-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-bus
+  template:
+    metadata:
+      labels:
+        app: event-bus
+    spec:
+      containers:
+        - name: event-bus
+          image: jseow5177/event-bus:latest
+---
+# The ClusterIP service for Event Bus Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-bus-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: event-bus
+  ports:
+    - name: event-bus
+      protocol: TCP
+      port: 4005 # The port to reach this service
+      targetPort: 4005 # The target port where this service will direct the request to 
+
