@@ -18,7 +18,7 @@ app.use('/', queryRoutes)
 app.listen(PORT, async () => {
   console.log(`Listening on ${PORT}`)
 
-  const res = await axios.get('http://localhost:4005/events')
+  const res = await axios.get('http://event-bus-srv:4005/events')
   const events = res.data
 
   for (let event of events) {
@@ -26,5 +26,5 @@ app.listen(PORT, async () => {
 
     queryControllers.handleEvent(event.type, event.data)
   }
-  
+
 })

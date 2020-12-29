@@ -3,6 +3,8 @@ const posts = {}
 const queryControllers = {
 
   handleEvent: function (type, data) {
+    console.log(`Event received: ${type}`)
+
     if (type === 'PostCreated') {
       const { postId, title } = data
 

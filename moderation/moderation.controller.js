@@ -12,7 +12,7 @@ const moderationControllers = {
       const status = data.content.includes('orange') ? 'rejected' : 'approved'
 
       // Emit CommentModerated event to event bus
-      await axios.post('http://localhost:4005/events', {
+      await axios.post('http://event-bus-srv:4005/events', {
         type: 'CommentModerated',
         data: {
           commentId: data.commentId,

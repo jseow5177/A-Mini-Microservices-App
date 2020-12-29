@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 
-function PostCreate () {
+function PostCreate() {
   const [title, setTitle] = useState('')
 
   const handleTitleChange = (e) => {
@@ -11,7 +11,7 @@ function PostCreate () {
   const handleFormSubmit = async (e) => {
     e.preventDefault()
 
-    await axios.post('http://localhost:4000/posts', {
+    await axios.post('http://posts.com/posts/create', {
       title
     })
 

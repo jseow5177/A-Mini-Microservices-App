@@ -3,11 +3,11 @@ import axios from 'axios'
 import CommentList from '../comments/CommentList'
 import CommentCreate from '../comments/CommentCreate'
 
-function PostList () {
+function PostList() {
   const [posts, setPosts] = useState({})
 
   const fetchPosts = async () => {
-    const res = await axios.get('http://localhost:4002/posts')
+    const res = await axios.get('http://posts.com/posts')
 
     setPosts(res.data)
   }
@@ -26,7 +26,7 @@ function PostList () {
         <div className="card-body">
           <h3>{post.title}</h3>
           <CommentList comments={post.comments} />
-          <CommentCreate postId={post.postId}/>
+          <CommentCreate postId={post.postId} />
         </div>
       </div>
     )
@@ -34,7 +34,7 @@ function PostList () {
 
   return (
     <div className="d-flex flex-row flex-wrap justify-content-between">
-      { renderedPosts }
+      { renderedPosts}
     </div>
   )
 }

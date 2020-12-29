@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 
-function CommentCreate ({ postId }) {
+function CommentCreate({ postId }) {
   const [content, setContent] = useState('')
 
   const handleChangeContent = (e) => {
@@ -11,7 +11,7 @@ function CommentCreate ({ postId }) {
   const handleFormSubmit = async (e) => {
     e.preventDefault()
 
-    await axios.post(`http://localhost:4001/posts/${postId}/comments`, {
+    await axios.post(`http://posts.com/posts/${postId}/comments`, {
       content
     })
 
@@ -23,7 +23,7 @@ function CommentCreate ({ postId }) {
       <form onSubmit={handleFormSubmit}>
         <div className="form-group">
           <label>New Comment</label>
-          <input value={content} onChange={handleChangeContent} className="form-control"/>
+          <input value={content} onChange={handleChangeContent} className="form-control" />
         </div>
         <button className="btn btn-primary mt-2">Submit</button>
       </form>

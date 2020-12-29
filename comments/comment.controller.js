@@ -8,7 +8,7 @@ const commentControllers = {
 
   addNewComment: async function (req, res) {
     const commentId = randomBytes(4).toString('hex') // Generate random hexadecimal string
-    const { content } = req.body    
+    const { content } = req.body
 
     // Check if the post has existing comments
     const comments = commentsByPostId[req.params.id] || []
@@ -22,7 +22,7 @@ const commentControllers = {
     commentsByPostId[req.params.id] = comments
 
     // Emit CommentCreated event to event bus
-    await axios.post('http://localhost:4005/events', {
+    await axios.post('http://event-bus-srv:4005/events', {
       type: 'CommentCreated',
       data: {
         commentId,
@@ -50,9 +50,9 @@ const commentControllers = {
       const comment = comments.find(comment => comment.commentId === commentId)
 
       comment.status = status // Update status of moderated comment
-      
+
       // Emit CommentUpdated event to the event bus
-      await axios.post('http://localhost:4005/events', {
+      await axios.post('http://event-bus-srv:4005/events', {
         type: 'CommentUpdated',
         data: {
           commentId,
