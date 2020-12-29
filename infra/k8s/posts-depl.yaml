@@ -1,0 +1,35 @@
+# The Deployment for Posts Service
+# It has only one pod with one container in it
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posts
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: jseow5177/posts:latest
+---
+# The ClusterIP service for Posts Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: posts
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4000 # The port to reach this service
+      targetPort: 4000 # The target port where this service will direct the request to
+
