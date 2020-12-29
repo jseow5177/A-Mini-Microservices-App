@@ -1,0 +1,34 @@
+# The Deployment for Query Service
+# It has only one pod with one container in it
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: query
+  template:
+    metadata:
+      labels:
+        app: query
+    spec:
+      containers:
+        - name: query
+          image: jseow5177/query:latest
+---
+# The ClusterIP service for Query Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: query
+  ports:
+    - name: query
+      protocol: TCP
+      port: 4002 # The port to reach this service
+      targetPort: 4002 # The target port where this service will direct the request to
