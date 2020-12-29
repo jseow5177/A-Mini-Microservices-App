@@ -21,6 +21,8 @@ This is a minimalistic React, Node and Express application that demonstrates the
 
 9. [Basic Design Challenges and Solutions](#basic-design-challenges-and-solutions)
 
+10. [Implementation with Docker and Kubernetes](#implementation-with-docker-and-kubernetes)
+
 ## Monolithic Server vs Microservices
 
 A monolith contains routes, middlewares, business logic and database access to implement **all features** of an application.
@@ -184,3 +186,51 @@ A Post can have zero or many Comments.
     - Business logic of a resource should be handled and contained within its service, which is the Comments Service.
     - The Query Service deals with only the presentation logic. It shouldn't be concerned with how and why a comment is updated. It should only be aware of **when** a comment is updated.
     - This is the purpose of the CommentUpdated event received by the Query Service. It doesn't tell how a comment should be updated. That is handled by the CommentModerated event received by the Moderation Service.
+
+## Implementation with Docker and Kubernetes
+
+To start the application, at the root directory, run `skaffold dev`.
+
+### Basic Terminologies
+
+1. Cluster: A set of Nodes that run containerized applications managed by Kubernetes.
+2. Node: A worker machine as part of a cluster. In this application, there is only one node.
+3. Ingress: An API object that manages external access to the services in a cluster.
+    - Traffic routing is controlled by a set of rules defined in an Ingress resource.
+    - An Ingress Controller is used to carry out the rules of the Ingress.
+    - An Ingress Controller usually fulfills the Ingress with a load balancer.
+4. Service: An abstract way to expose an application running on Pods as a network service. There are ClusterIP, NodePort and LoadBalancer service.
+    - ClusterIP: Exposes a pod within the cluster. Used to handle communications between services.
+    - NodePort: Exposes a pod to the outside of a cluster. Usually used to development purposes only.
+    - LoadBalancer: Also exposes a pod to the outside of a cluster. Tells Kubernetes to reach out to its cloud provider and provision a load balancer.
+5. Deployment: Creates and manages Pods. A Deployment always ensures that there are a certain number of Pods running, depending on what is specified in the configuration. 
+6. Image: The receipe to run a container. It contains a snapshot of all the files, code and dependencies needed to start a container. When we run an Image, it will be allocated resources (memory, network, etc) which forms a container. 
+7. Container: A package with the program to execute and all its dependencies, such as the code, runtime, system libraries, etc, all bound together in a box. It is an instance of an Image.
+8. Pod: The smallest deployable unit in Kubernetes. It houses one or many containers with some specifications on how to run the containers,
+
+### Application Architecture
+
+1. There is only one Cluster with a Node in it. The Node has 6 different Pods, each with only one Container in it.
+2. Each Container is built with a Docker Image of the service it represents. An Image has the name of `jseow5177/<service_name>`. For example, the Posts Service has an Image named `jseow5177/posts`.
+3. Each Pod has a ClusterIP Service to manage communication between services in a Cluster. A ClusterIP Service has a name of `<service_name>_srv`. For example, the Posts Service has a ClusterIP Service named `posts_srv`.
+4. Each Pod has a Deployment that creates and manages the Pod. A Deployment has a name of `<service_name>_depl`. For example, the Posts Service has a Deployment named `posts_depl`.
+5. The Ingress controller used in this application is the **NGINX Ingress Controller**.
+6. Skaffold is used for easy deployment and update of code in Pods.
+
+![docker_and_kubernetes](./assets/docker_and_kubernetes.png)
+
+
+### Basic Commands
+
+`docker build -t <image_tag> <path_to_Dockerfile>`
+
+Builds a Docker Image.
+
+`docker run <image_tag>`
+
+Spins up a Docker Container.
+
+`kubectl apply -f <config_file>`
+
+Runs a Kubernetes yaml config file. Used to create Kubernetes Objects such as Pods, Deployments and Services.
+
