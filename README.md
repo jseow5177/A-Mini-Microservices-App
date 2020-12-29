@@ -194,14 +194,14 @@ To start the application, at the root directory, run `skaffold dev`.
 ### Basic Terminologies
 
 1. Cluster: A set of Nodes that run containerized applications managed by Kubernetes.
-2. Node: A worker machine as part of a cluster. In this application, there is only one node.
+2. Node: A worker machine as part of a cluster.
 3. Ingress: An API object that manages external access to the services in a cluster.
     - Traffic routing is controlled by a set of rules defined in an Ingress resource.
     - An Ingress Controller is used to carry out the rules of the Ingress.
     - An Ingress Controller usually fulfills the Ingress with a load balancer.
 4. Service: An abstract way to expose an application running on Pods as a network service. There are ClusterIP, NodePort and LoadBalancer service.
     - ClusterIP: Exposes a pod within the cluster. Used to handle communications between services.
-    - NodePort: Exposes a pod to the outside of a cluster. Usually used to development purposes only.
+    - NodePort: Exposes a pod to the outside of a cluster. Usually used for development purposes only.
     - LoadBalancer: Also exposes a pod to the outside of a cluster. Tells Kubernetes to reach out to its cloud provider and provision a load balancer.
 5. Deployment: Creates and manages Pods. A Deployment always ensures that there are a certain number of Pods running, depending on what is specified in the configuration. 
 6. Image: The receipe to run a container. It contains a snapshot of all the files, code and dependencies needed to start a container. When we run an Image, it will be allocated resources (memory, network, etc) which forms a container. 
@@ -210,7 +210,7 @@ To start the application, at the root directory, run `skaffold dev`.
 
 ### Application Architecture
 
-1. There is only one Cluster with a Node in it. The Node has 6 different Pods, each with only one Container in it.
+1. There is only one Cluster with a Node in it. The Node has six different Pods, each with only one Container in it.
 2. Each Container is built with a Docker Image of the service it represents. An Image has the name of `jseow5177/<service_name>`. For example, the Posts Service has an Image named `jseow5177/posts`.
 3. Each Pod has a ClusterIP Service to manage communication between services in a Cluster. A ClusterIP Service has a name of `<service_name>_srv`. For example, the Posts Service has a ClusterIP Service named `posts_srv`.
 4. Each Pod has a Deployment that creates and manages the Pod. A Deployment has a name of `<service_name>_depl`. For example, the Posts Service has a Deployment named `posts_depl`.
